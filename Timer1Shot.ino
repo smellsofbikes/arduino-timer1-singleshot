@@ -31,7 +31,7 @@ void osp_setup(uint16_t cycles) {
   OSP_SET_WIDTH(cycles);    // This also makes new OCR values get loaded frm the buffer on every clock cycle. 
 
   TCCR1A = _BV(COM1B0) | _BV(COM1B1) | _BV(WGM10) | _BV(WGM11); // OC1B=Set on Match, clear on BOTTOM. Mode 15 Fast PWM.
-  TCCR1B = _BV(WGM12)| _BV(WGM13) | _BV(CS10);         // Start counting now. WGM22=1 to select Fast PWM mode 15
+  TCCR1B = _BV(WGM12)| _BV(WGM13) | _BV(CS10);         // Start counting now. WGM12=1 to select Fast PWM mode 15
 
   DDRB |= _BV(DDB2);     // Set pin to output: PB2, aka arduino pin 10
 }
@@ -56,7 +56,7 @@ void osp_setup() {
 // Order of operations in calculating m must avoid overflow of the unint16_t.
 // TCNT1 starts one count lower than the match value becuase the chip will block any compare on the cycle after setting a TCNT. 
 
-#define OSP_SET_AND_FIRE(cycles) {uint16_t m=0xff-(cycles-1); OCR1B=m;TCNT1 =m-1;}
+#define OSP_SET_AND_FIRE(cycles) {uint16_t m=0xffff-(cycles-1); OCR1B=m;TCNT1 =m-1;}
 
 
 void setup()
